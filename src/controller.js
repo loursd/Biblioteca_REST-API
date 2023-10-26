@@ -15,14 +15,14 @@ class LibroController{
 
     async delete(req, res){
         const libro = req.body;
-        const [result] = await pool.query(`DELETE FROM Libros WHERE id=(?)`, [libro.id]);
-        res.json({"Libro Eliminado": result.affectedRows});
+        const [result] = await pool.query(`DELETE FROM Libros WHERE ISBN=(?)`, [libro.ISBN]);
+        res.json({"Libros Eliminados": result.affectedRows});
     }
 
     async update(req, res){
         const libro = req.body;
         const [result] = await pool.query(`UPDATE Libros SET nombre=(?), autor=(?), categoria=(?), año-publicacion=(?), ISBN=(?) WHERE id=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN, libro.id]);
-        res.json({"Libro Actualizado": result.changedRows});
+        res.json({"Libros Actualizados": result.changedRows});
     }
 
     async getOne(req, res){
