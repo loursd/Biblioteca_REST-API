@@ -17,7 +17,7 @@ class LibroController {
             if (result.length > 0) {
                 res.json(result[0]);
             } else {
-                res.status(404).json({ "Error": `No se encontró el ISBN ${libro.ISBN} ` });
+                res.status(404).json({ "Error": `No se encontró un libro asociado al ISBN ${libro.ISBN} ` });
             }
         } catch (error) {
             res.status(500).json({ "Error": "Ocurrió un error al obtener el libro" });
