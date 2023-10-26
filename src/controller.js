@@ -1,35 +1,79 @@
-import {pool} from './database.js';
+import { pool } from './database.js';
 
-class LibroController{
+class LibroController {
 
     async getAll(req, res) {
-        const [result]= await pool.query('SELECT * FROM libros');
-        res.json(result);
+        try {
+            const [result] = await pool.query('SELECT * FROM libros');
+            res.json(result);
+        } catch (error) {
+            res.status(500).json({ "Error": "Ocurrió un error al obtener los libros" })
+        }
+    }
+    async getOne(req, res) {
+        try {
+            const libro = req.body;
+            const [result] = await pool.query('SELECT * FROM libros WHERE ISBN = ?', [libro.ISBN]);
+            if (result.length > 0) {
+                res.json(result[0]);
+            } else {
+                res.status(404).json({ "Error": `No se encontró el ISBN ${libro.ISBN} ` });
+            }
+        } catch (error) {
+            res.status(500).json({ "Error": "Ocurrió un error al obtener el libro" });
+        }
     }
 
-    async add(req, res){
-        const libro = req.body;
-        const [result] = await pool.query(`INSERT INTO Libros(nombre, autor, categoria, aniopublicacion, ISBN) VALUES (?, ?, ?, ?, ?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN]);
-        res.json({"Nuevo libro agregado": result.insertid});
+    async add(req, res) {
+        try {
+            const libro = req.body;
+            const [result] = await pool.query(`INSERT INTO Libros(nombre, autor, categoria, aniopublicacion, ISBN) VALUES (?, ?, ?, ?, ?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN]);
+            res.json({ "ID agregado": result.insertid, "message": "Nuevo libro agregado con éxito" });
+        } catch (error) {
+            res.status(500).json({"Error":"Ocurrió un error al agregar el libro"});
+        }
     }
 
-    async delete(req, res){
-        const libro = req.body;
-        const [result] = await pool.query(`DELETE FROM Libros WHERE ISBN=(?)`, [libro.ISBN]);
-        res.json({"Libros Eliminados": result.affectedRows});
+    async deleteISBN(req, res) {
+        try{
+            const libro = req.body;
+            const [result] = await pool.query(`DELETE FROM Libros WHERE ISBN=(?)`, [libro.ISBN]);
+            if (result.affectedRows > 0) {
+                res.json({ "message": `Libro con ISBN ${libro.ISBN} eliminado exitosamente` });
+            } else {
+                res.status(404).json({ "Error": `No se encontró ningún libro con el ISBN ${libro.ISBN}` });
+            }
+        } catch (error) {
+            res.status(500).json({ "Error": "Ocurrió un error al intentar eliminar el libro" });
+        }
     }
-
-    async update(req, res){
-        const libro = req.body;
-        const [result] = await pool.query(`UPDATE Libros SET nombre=(?), autor=(?), categoria=(?), año-publicacion=(?), ISBN=(?) WHERE id=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN, libro.id]);
-        res.json({"Libros Actualizados": result.changedRows});
+    
+    async deleteID(req, res) {
+        try{
+            const libro = req.body;
+            const [result] = await pool.query(`DELETE FROM Libros WHERE ID=(?)`, [libro.id]);
+            if (result.affectedRows > 0) {
+                res.json({ "message": `Libro con ID ${libro.id} eliminado exitosamente` });
+            } else {
+                res.status(404).json({ "Error": `No se encontró ningún libro con ID ${libro.id}` });
+            }
+        } catch (error) {
+            res.status(500).json({ "Error": "Ocurrió un error al intentar eliminar el libro" });
+        }
     }
-
-    async getOne(req, res){
-        const libro = req.body;
-        const id = parseInt(libro.id);
-        const [result] = await pool.query(`SELECT * FROM Libros WHERE id=(?)`, [id]); 
-        res.json(result);
+    async update(req, res) {
+        try {
+            const libro = req.body;
+            const [result] = await pool.query(`UPDATE Libros SET nombre=(?), autor=(?), categoria=(?), año-publicacion=(?) WHERE ISBN=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN]);
+            if (result.affectedRows > 0) {
+                res.json({ "message": `Libro con ISBN ${libro.ISBN} actualizado con éxito` });             
+            } else {
+                res.status(404).json({ "Error": `No se encontró ningún libro con el ISBN ${libro.ISBN}` });
+            }
+        } catch (error) {
+            res.status(500).json({ "Error": "Ocurrió un error al actualizar el libro."});
+        }
+        
     }
 
 }
