@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2023 a las 05:59:43
+-- Tiempo de generación: 30-10-2023 a las 19:03:16
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -46,7 +46,8 @@ INSERT INTO `libros` (`id`, `nombre`, `autor`, `categoria`, `aniopublicacion`, `
 (3, 'La isla de Eudamon', 'Leandro Calderone', 'Novela', '2010-01-11', '9789504924623'),
 (4, 'El curioso incidente del perro', 'Mark Haddon', 'Novela', '2004-01-09', '9788478889105'),
 (5, 'Los Miserables', 'Victor Hugo', 'Ficción', '1862-06-01', '9788491051121'),
-(6, 'Un ataque de lucidez', 'Jill Bolte Taylor', 'Biografía', '2009-01-23', '9788499927275');
+(6, 'Casa de las Hojas', 'Mark Z. Danielewski', 'Terror', '2014-12-01', '9788492837465'),
+(7, 'Un ataque de lucidez', 'Jill Bolte Taylor', 'Biografía', '2009-01-23', '9788499927275');
 
 --
 -- Índices para tablas volcadas
@@ -66,7 +67,7 @@ ALTER TABLE `libros`
 -- AUTO_INCREMENT de la tabla `libros`
 --
 ALTER TABLE `libros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
