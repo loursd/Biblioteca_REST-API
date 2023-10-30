@@ -12,12 +12,12 @@ class LibroController {
     }
     async getOne(req, res) {
         try {
-            const libro = req.body;
-            const [result] = await pool.query('SELECT * FROM libros WHERE ISBN = ?', [libro.ISBN]);
+            const libro = req.params.id;
+            const [result] = await pool.query('SELECT * FROM libros WHERE id = ?', [libro]);
             if (result.length > 0) {
                 res.json(result[0]);
             } else {
-                res.status(404).json({ "Error": `No se encontró un libro asociado al ISBN ${libro.ISBN} ` });
+                res.status(404).json({ "Error": `No se encontró un libro asociado al ID ${libro.id} ` });
             }
         } catch (error) {
             res.status(500).json({ "Error": "Ocurrió un error al obtener el libro" });
@@ -64,11 +64,11 @@ class LibroController {
     async update(req, res) {
         try {
             const libro = req.body;
-            const [result] = await pool.query(`UPDATE Libros SET nombre=(?), autor=(?), categoria=(?), año-publicacion=(?) WHERE ISBN=(?)`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN]);
-            if (result.affectedRows > 0) {
-                res.json({ "message": `Libro con ISBN ${libro.ISBN} actualizado con éxito` });             
+            const [result] = await pool.query(`UPDATE Libros SET nombre=(?), autor=(?), categoria=(?), aniopublicacion=(?), ISBN=(?) WHERE id=?`, [libro.nombre, libro.autor, libro.categoria, libro.aniopublicacion, libro.ISBN, libro.id]);
+            if (result.changedRows > 0) {
+                res.json({ "message": `Libro actualizado con éxito` });             
             } else {
-                res.status(404).json({ "Error": `No se encontró ningún libro con el ISBN ${libro.ISBN}` });
+                res.status(404).json({ "Error": `No se encontró ningún libro con el ID ${libro.id}` });
             }
         } catch (error) {
             res.status(500).json({ "Error": "Ocurrió un error al actualizar el libro."});
